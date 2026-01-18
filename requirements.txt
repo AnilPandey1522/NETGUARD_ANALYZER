@@ -1,0 +1,10 @@
+Flask
+pymongo
+pandas
+numpy
+scikit-learn
+scapy
+plotly
+joblib
+# cicflowmeter is highly recommended to match your dataset features
+cicflowmeter
