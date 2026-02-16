@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetGuard | Configuration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+                    colors: { slate: { 850: '#1e293b', 900: '#0f172a', 950: '#020617' } }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0B1120; color: #cbd5e1; }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        /* Toggle Switch */
+        .toggle-checkbox:checked { right: 0; border-color: #06b6d4; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #06b6d4; }
+    </style>
+</head>
+<body class="h-screen flex overflow-hidden">
+
+    <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col">
+        <div class="h-16 flex items-center px-6 border-b border-slate-800 bg-slate-950/50">
+            <div class="w-8 h-8 rounded bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center mr-3">
+                <i class="fa-solid fa-shield-halved text-white text-sm"></i>
+            </div>
+            <h1 class="font-bold text-white tracking-wide">NetGuard</h1>
+        </div>
+        <nav class="p-4 space-y-2">
+            <a href="/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all">
+                <i class="fa-solid fa-arrow-left"></i> <span class="text-sm">Back to Dashboard</span>
+            </a>
+            <div class="px-3 py-2 bg-slate-800/50 rounded-lg border border-slate-700 mt-4">
+                <span class="text-xs font-mono text-cyan-400">CURRENT PROFILE</span>
+                <div class="flex items-center gap-2 mt-2">
+                    <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                    <span class="text-sm font-bold text-white">Administrator</span>
+                </div>
+            </div>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-full overflow-hidden bg-[#0B1120]">
+        <header class="h-16 border-b border-slate-800 bg-slate-900/50 flex items-center justify-between px-8 backdrop-blur-sm">
+            <h2 class="text-lg font-bold text-white tracking-wide">System Configuration</h2>
+            <button onclick="saveSettings()" class="bg-cyan-600 hover:bg-cyan-500 text-white px-4 py-2 rounded text-sm font-bold transition-colors flex items-center gap-2">
+                <i class="fa-solid fa-save"></i> Save Changes
+            </button>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8 max-w-5xl mx-auto w-full space-y-8">
+
+            <section>
+                <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">External Integrations</h3>
+                <div class="glass-panel p-6 rounded-xl space-y-6">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-2">VIRUSTOTAL API KEY</label>
+                        <div class="flex gap-2">
+                            <input type="password" value="84759...HIDDEN" class="flex-1 bg-slate-950 border border-slate-700 rounded px-4 py-2 text-sm text-slate-300 focus:border-cyan-500 focus:outline-none font-mono">
+                            <button class="px-3 py-2 bg-slate-800 border border-slate-700 rounded hover:text-white transition"><i class="fa-solid fa-eye"></i></button>
+                        </div>
+                        <p class="text-[10px] text-slate-500 mt-1">Used for threat intelligence lookups.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">Heuristic Engine</h3>
+                <div class="glass-panel p-6 rounded-xl grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-sm font-bold text-white">Confidence Threshold</label>
+                            <span class="text-xs font-mono text-cyan-400">85%</span>
+                        </div>
+                        <input type="range" class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500" min="0" max="100" value="85">
+                        <p class="text-[10px] text-slate-500 mt-2">Alerts below this confidence score will be marked as "Suspicious" instead of "Threat".</p>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-sm font-bold text-white">Auto-Mitigation (Firewall)</span>
+                            
+                            <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                                <input type="checkbox" name="toggle" id="toggle" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer transition-all duration-300"/>
+                                <label for="toggle" class="toggle-label block overflow-hidden h-5 rounded-full bg-slate-700 cursor-pointer"></label>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-slate-500">If enabled, NetGuard will automatically insert iptables DROP rules for high-confidence threats.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">Alerting</h3>
+                <div class="glass-panel p-6 rounded-xl space-y-4">
+                    <div class="flex items-center justify-between p-3 bg-slate-800/30 rounded border border-slate-700/50">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-envelope text-slate-400"></i>
+                            <div>
+                                <h4 class="text-sm font-bold text-white">Email Reports</h4>
+                                <p class="text-[10px] text-slate-500">Send daily summary PDF to admin@netguard.local</p>
+                            </div>
+                        </div>
+                        <input type="checkbox" checked class="accent-cyan-500 w-4 h-4">
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 bg-slate-800/30 rounded border border-slate-700/50">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-bell text-slate-400"></i>
+                            <div>
+                                <h4 class="text-sm font-bold text-white">Real-time Dashboard Alerts</h4>
+                                <p class="text-[10px] text-slate-500">Play sound on critical threat detection.</p>
+                            </div>
+                        </div>
+                        <input type="checkbox" checked class="accent-cyan-500 w-4 h-4">
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        function saveSettings() {
+            const btn = document.querySelector('button[onclick="saveSettings()"]');
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Saving...';
+            
+            // Simulate API Call
+            fetch('/api/save_config', { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Saved!';
+                btn.classList.remove('bg-cyan-600', 'hover:bg-cyan-500');
+                btn.classList.add('bg-emerald-600', 'hover:bg-emerald-500');
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.add('bg-cyan-600', 'hover:bg-cyan-500');
+                    btn.classList.remove('bg-emerald-600', 'hover:bg-emerald-500');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

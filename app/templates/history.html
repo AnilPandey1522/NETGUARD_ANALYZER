@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NetGuard Enterprise | Event Logs</title>
+    <title>NetGuard | Event Logs</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -20,12 +20,8 @@
                         cyber: {
                             bg: '#0B1120',
                             panel: '#151F32',
-                            border: '#2A3B55',
                             primary: '#0EA5E9',
                             success: '#10B981',
-                            danger: '#EF4444',
-                            warning: '#F59E0B',
-                            text: '#94A3B8'
                         }
                     }
                 }
@@ -35,167 +31,129 @@
     <style>
         body {
             background-color: #0B1120;
-            background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 30px 30px;
+            background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, #0B1120 70%);
         }
+        .glass-panel {
+            background: rgba(21, 31, 50, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0B1120; }
-        ::-webkit-scrollbar-thumb { background: #2A3B55; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #3B82F6; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
 </head>
-<body class="text-slate-300 font-sans antialiased h-screen flex overflow-hidden">
+<body class="text-slate-300 font-sans antialiased min-h-screen flex flex-col">
 
-    <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col z-20 hidden md:flex">
-        <div class="h-16 flex items-center px-6 border-b border-slate-800">
-            <div class="flex items-center gap-3 text-white">
-                <i class="fa-solid fa-shield-virus text-cyan-500 text-2xl"></i>
-                <div>
-                    <h1 class="font-bold text-lg tracking-tight leading-none">NetGuard</h1>
-                    <span class="text-[10px] text-slate-500 font-mono uppercase tracking-wider">Enterprise Ops</span>
-                </div>
+    <nav class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-shield-virus text-cyan-500 text-xl"></i>
+                <span class="font-bold text-white tracking-tight">NetGuard <span class="text-slate-500 text-xs font-normal">/ OPS CENTER</span></span>
+            </div>
+            <div class="flex gap-4 text-sm font-medium">
+                <a href="/" class="text-slate-400 hover:text-white transition-colors">Dashboard</a>
+                <a href="/history" class="text-cyan-400">Event Logs</a>
+                <a href="/retrain" class="text-slate-400 hover:text-white transition-colors">Retrain Model</a>
             </div>
         </div>
+    </nav>
 
-        <nav class="flex-1 py-6 px-3 space-y-1">
-            <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Modules</p>
-            
-            <a href="/" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-all group">
-                <i class="fa-solid fa-grid-2 text-center w-5 group-hover:text-cyan-400"></i>
-                Dashboard Overview
-            </a>
-            
-            <a href="/live" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-all group">
-                <i class="fa-solid fa-wave-square text-center w-5 group-hover:text-cyan-400"></i>
-                Live Monitor
-            </a>
-            
-            <a href="/history" class="flex items-center gap-3 px-3 py-2 text-sm font-medium bg-cyan-500/10 text-cyan-400 rounded-lg border border-cyan-500/20">
-                <i class="fa-solid fa-clock-rotate-left text-center w-5"></i>
-                Event Logs
-            </a>
-
-            <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-8 mb-2">System AI</p>
-            
-            <a href="/retrain" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-all group">
-                <i class="fa-solid fa-brain text-center w-5 group-hover:text-purple-400"></i>
-                Model Training
-            </a>
-        </nav>
-
-        <div class="p-4 border-t border-slate-800 bg-slate-950/50">
-            <div class="flex items-center gap-3 mb-2">
-                <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                <span class="text-xs font-mono text-emerald-500">SYSTEM ONLINE</span>
-            </div>
-        </div>
-    </aside>
-
-    <main class="flex-1 flex flex-col relative overflow-hidden">
+    <main class="flex-grow max-w-7xl mx-auto w-full px-6 py-12">
         
-        <header class="h-16 bg-slate-900/80 backdrop-blur border-b border-slate-800 flex items-center justify-between px-6 z-10">
-            <div class="flex items-center gap-4">
-                <span class="text-slate-400 text-sm"><i class="fa-solid fa-house text-xs mr-2"></i> / Operations / <span class="text-cyan-400">Event Logs</span></span>
+        <div class="flex flex-col md:flex-row justify-between items-end md:items-center mb-8 gap-4">
+            <div>
+                <h2 class="text-2xl font-bold text-white mb-1">Full System Audit Logs</h2>
+                <p class="text-slate-400 text-sm">Comprehensive history of all analyzed traffic captures.</p>
             </div>
-            <div class="flex items-center gap-4">
-                 <div class="h-8 w-8 rounded bg-cyan-600 flex items-center justify-center text-white text-xs font-bold">AD</div>
+            <div class="flex gap-3">
+                <button class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700 text-sm font-medium flex items-center gap-2 transition-all">
+                    <i class="fa-solid fa-filter"></i> Filter
+                </button>
+                <button class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700 text-sm font-medium flex items-center gap-2 transition-all">
+                    <i class="fa-solid fa-download"></i> Export CSV
+                </button>
             </div>
-        </header>
-
-        <div class="flex-1 overflow-y-auto p-6">
-            
-            <div class="flex flex-col md:flex-row justify-between items-end md:items-center mb-8 gap-4">
-                <div>
-                    <h2 class="text-2xl font-bold text-white mb-1">Full System Audit Logs</h2>
-                    <p class="text-slate-400 text-sm">Comprehensive history of all analyzed traffic captures.</p>
-                </div>
-                <div class="flex gap-3">
-                    <button class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700 text-sm font-medium flex items-center gap-2">
-                        <i class="fa-solid fa-filter"></i> Filter
-                    </button>
-                    <button class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded border border-slate-700 text-sm font-medium flex items-center gap-2">
-                        <i class="fa-solid fa-download"></i> Export CSV
-                    </button>
-                </div>
-            </div>
-
-            <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead class="bg-slate-950 text-xs font-mono uppercase text-slate-500">
-                            <tr>
-                                <th class="px-6 py-4 border-b border-slate-800 w-32">Status</th>
-                                <th class="px-6 py-4 border-b border-slate-800">File Identifier</th>
-                                <th class="px-6 py-4 border-b border-slate-800">Scan ID</th>
-                                <th class="px-6 py-4 border-b border-slate-800">Timestamp (UTC)</th>
-                                <th class="px-6 py-4 border-b border-slate-800 text-right">Report</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-sm divide-y divide-slate-800">
-                            {% if analyses %}
-                                {% for scan in analyses %}
-                                <tr class="group hover:bg-slate-800/50 transition-colors">
-                                    <td class="px-6 py-4">
-                                        {% if scan.status == 'Danger' %}
-                                            <span class="inline-flex items-center px-2.5 py-1 rounded text-xs font-bold bg-red-500/10 text-red-500 border border-red-500/20">
-                                                <i class="fa-solid fa-triangle-exclamation mr-1.5"></i> THREAT
-                                            </span>
-                                        {% elif scan.status == 'Safe' %}
-                                            <span class="inline-flex items-center px-2.5 py-1 rounded text-xs font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                                                <i class="fa-solid fa-shield-check mr-1.5"></i> SECURE
-                                            </span>
-                                        {% else %}
-                                            <span class="inline-flex items-center px-2.5 py-1 rounded text-xs font-bold bg-slate-700 text-slate-300">
-                                                PROCESSING
-                                            </span>
-                                        {% endif %}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded bg-slate-800 flex items-center justify-center text-slate-500 group-hover:text-cyan-400 transition-colors">
-                                                <i class="fa-regular fa-file-code"></i>
-                                            </div>
-                                            <span class="text-slate-300 font-medium font-mono text-xs">{{ scan.filename }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 font-mono text-xs text-slate-500">
-                                        #{{ scan._id }}
-                                    </td>
-                                    <td class="px-6 py-4 font-mono text-xs text-slate-400">
-                                        {{ scan.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
-                                    </td>
-                                    <td class="px-6 py-4 text-right">
-                                        <a href="{{ url_for('main.show_report', report_id=scan._id) }}" class="inline-flex items-center justify-center w-8 h-8 rounded bg-slate-800 hover:bg-cyan-600 hover:text-white text-slate-400 transition-all shadow border border-slate-700 hover:border-cyan-500">
-                                            <i class="fa-solid fa-arrow-right"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            {% else %}
-                                <tr>
-                                    <td colspan="5" class="px-6 py-12 text-center text-slate-500 italic">
-                                        <div class="mb-4 text-slate-700">
-                                            <i class="fa-solid fa-box-open text-5xl"></i>
-                                        </div>
-                                        No event history found. Run a scan from the dashboard to generate logs.
-                                    </td>
-                                </tr>
-                            {% endif %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <div class="flex items-center justify-between mt-6 px-2">
-                <span class="text-xs text-slate-500">Showing all records</span>
-                <div class="flex gap-2">
-                    <button class="px-3 py-1 bg-slate-900 border border-slate-800 rounded text-xs text-slate-500 cursor-not-allowed" disabled>Previous</button>
-                    <button class="px-3 py-1 bg-slate-900 border border-slate-800 rounded text-xs text-slate-500 cursor-not-allowed" disabled>Next</button>
-                </div>
-            </div>
-
         </div>
+
+        <div class="glass-panel rounded-xl overflow-hidden shadow-2xl">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-slate-950/50 text-xs font-mono uppercase text-slate-500">
+                        <tr>
+                            <th class="px-6 py-4 border-b border-slate-800 w-32">Status</th>
+                            <th class="px-6 py-4 border-b border-slate-800">File Identifier</th>
+                            <th class="px-6 py-4 border-b border-slate-800">Scan ID</th>
+                            <th class="px-6 py-4 border-b border-slate-800">Timestamp (UTC)</th>
+                            <th class="px-6 py-4 border-b border-slate-800 text-right">Report</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm divide-y divide-slate-800/50">
+                        {% if analyses %}
+                            {% for scan in analyses %}
+                            <tr class="group hover:bg-slate-800/30 transition-colors">
+                                <td class="px-6 py-4">
+                                    {% if scan.status == 'Danger' %}
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded text-xs font-bold bg-red-500/10 text-red-500 border border-red-500/20 shadow-[0_0_10px_rgba(239,68,68,0.2)]">
+                                            <i class="fa-solid fa-triangle-exclamation mr-1.5"></i> THREAT
+                                        </span>
+                                    {% elif scan.status == 'Safe' %}
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded text-xs font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
+                                            <i class="fa-solid fa-shield-check mr-1.5"></i> SECURE
+                                        </span>
+                                    {% else %}
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded text-xs font-bold bg-slate-700 text-slate-300">
+                                            PROCESSING
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded bg-slate-800/50 flex items-center justify-center text-slate-500 group-hover:text-cyan-400 transition-colors">
+                                            <i class="fa-regular fa-file-code"></i>
+                                        </div>
+                                        <span class="text-slate-300 font-medium font-mono text-xs">{{ scan.filename }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 font-mono text-xs text-slate-500">
+                                    <span class="px-2 py-1 rounded bg-slate-900 border border-slate-800">#{{ scan._id }}</span>
+                                </td>
+                                <td class="px-6 py-4 font-mono text-xs text-slate-400">
+                                    {{ scan.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <a href="{{ url_for('main.show_report', report_id=scan._id) }}" class="inline-flex items-center justify-center w-8 h-8 rounded bg-slate-800 hover:bg-cyan-600 hover:text-white text-slate-400 transition-all shadow border border-slate-700 hover:border-cyan-500">
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="px-6 py-16 text-center text-slate-500 italic">
+                                    <div class="mb-4 text-slate-700">
+                                        <i class="fa-solid fa-box-open text-5xl opacity-50"></i>
+                                    </div>
+                                    No event history found. Run a scan from the dashboard to generate logs.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-between mt-6 px-2">
+            <span class="text-xs text-slate-500">Showing all records</span>
+            <div class="flex gap-2">
+                <button class="px-3 py-1 bg-slate-900 border border-slate-800 rounded text-xs text-slate-500 cursor-not-allowed hover:bg-slate-800 transition-colors" disabled>Previous</button>
+                <button class="px-3 py-1 bg-slate-900 border border-slate-800 rounded text-xs text-slate-500 cursor-not-allowed hover:bg-slate-800 transition-colors" disabled>Next</button>
+            </div>
+        </div>
+
     </main>
+
 </body>
 </html>

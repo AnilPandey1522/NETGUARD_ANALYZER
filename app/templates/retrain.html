@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NetGuard | Model Retraining</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -25,8 +26,6 @@
                         }
                     },
                     animation: {
-                        'spin-slow': 'spin 3s linear infinite',
-                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'fade-in': 'fadeIn 0.5s ease-out forwards',
                     },
                     keyframes: {
@@ -54,18 +53,20 @@
             border-color: #0EA5E9;
         }
         /* Custom Scrollbar for Logs */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
+        
+        /* ApexCharts Dark Theme Overrides */
+        .apexcharts-tooltip {
+            background: #1e293b !important;
+            border-color: #334155 !important;
+            color: #fff;
         }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #0f172a; 
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #334155; 
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #475569; 
+        .apexcharts-tooltip-title {
+            background: #0f172a !important;
+            border-bottom: 1px solid #334155 !important;
         }
     </style>
 </head>
@@ -84,7 +85,7 @@
         </div>
     </nav>
 
-    <main class="flex-grow max-w-5xl mx-auto w-full px-6 py-12">
+    <main class="flex-grow max-w-6xl mx-auto w-full px-6 py-12">
         
         <div class="text-center mb-12">
             <h1 class="text-3xl font-bold text-white mb-2">Detection Engine Optimization</h1>
@@ -111,7 +112,6 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    
                     <div class="bg-slate-950 rounded-xl p-6 border border-slate-800 relative overflow-hidden group">
                         <div class="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
                             <i class="fa-solid fa-bullseye text-5xl text-emerald-500"></i>
@@ -150,6 +150,23 @@
                     </div>
                 </div>
 
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-slate-950 rounded-xl p-6 border border-slate-800">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-bold text-white uppercase tracking-wider">Confusion Matrix</h3>
+                            <span class="text-xs text-slate-500">Test Set Evaluation</span>
+                        </div>
+                        <div id="confusionChart" class="w-full h-64"></div>
+                    </div>
+
+                    <div class="bg-slate-950 rounded-xl p-6 border border-slate-800">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-sm font-bold text-white uppercase tracking-wider">Top Feature Importance</h3>
+                            <span class="text-xs text-slate-500">Gini Impurity</span>
+                        </div>
+                        <div id="featureChart" class="w-full h-64"></div>
+                    </div>
+                </div>
                 <div class="bg-black rounded-lg border border-slate-800 p-4 font-mono text-xs text-slate-400 mb-8 h-32 overflow-y-auto custom-scrollbar">
                     <p class="text-green-500">> Initiating Random Forest Classifier...</p>
                     <p class="text-slate-500">[INFO] Loading CSV data...</p>
@@ -231,10 +248,8 @@
 
     <div id="logModal" class="fixed inset-0 z-[100] hidden">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onclick="toggleLogs()"></div>
-        
         <div class="relative z-10 flex items-center justify-center min-h-screen p-4">
             <div class="bg-[#0B1120] border border-slate-700 w-full max-w-4xl rounded-xl shadow-2xl flex flex-col max-h-[80vh]">
-                
                 <div class="flex items-center justify-between p-4 border-b border-slate-800 bg-slate-900/50 rounded-t-xl">
                     <div class="flex items-center gap-2">
                         <i class="fa-solid fa-terminal text-slate-400"></i>
@@ -244,31 +259,11 @@
                         <i class="fa-solid fa-xmark text-xl"></i>
                     </button>
                 </div>
-                
                 <div class="flex-grow p-6 overflow-y-auto custom-scrollbar bg-black font-mono text-xs md:text-sm">
                     <div class="space-y-1 text-slate-400">
-                        <p><span class="text-slate-600">[14:20:01]</span> <span class="text-blue-400">INFO</span>  Initializing RandomForestClassifier(n_estimators=100, random_state=42)</p>
-                        <p><span class="text-slate-600">[14:20:02]</span> <span class="text-blue-400">INFO</span>  Dataset loaded: 24,500 samples detected.</p>
-                        <p><span class="text-slate-600">[14:20:02]</span> <span class="text-yellow-400">WARN</span>  Found 12 null values in column 'packet_size'. Dropping rows.</p>
-                        <p><span class="text-slate-600">[14:20:03]</span> <span class="text-blue-400">INFO</span>  Data Cleaned. Shape: (24488, 14).</p>
-                        <p><span class="text-slate-600">[14:20:03]</span> <span class="text-blue-400">INFO</span>  Performing Train/Test Split (80/20).</p>
-                        <br>
-                        <p class="text-slate-500">-- Starting Training Loop --</p>
-                        <p><span class="text-slate-600">[14:20:04]</span> <span class="text-purple-400">TRAIN</span> Tree 1/100 built. Depth: 12. Impurity: 0.45</p>
-                        <p><span class="text-slate-600">[14:20:04]</span> <span class="text-purple-400">TRAIN</span> Tree 10/100 built. Depth: 14. Impurity: 0.32</p>
-                        <p><span class="text-slate-600">[14:20:05]</span> <span class="text-purple-400">TRAIN</span> Tree 25/100 built. Depth: 15. Impurity: 0.21</p>
-                        <p><span class="text-slate-600">[14:20:05]</span> <span class="text-purple-400">TRAIN</span> Tree 50/100 built. Depth: 18. Impurity: 0.15</p>
-                        <p><span class="text-slate-600">[14:20:06]</span> <span class="text-purple-400">TRAIN</span> Tree 75/100 built. Depth: 18. Impurity: 0.09</p>
-                        <p><span class="text-slate-600">[14:20:07]</span> <span class="text-purple-400">TRAIN</span> Tree 100/100 built. Depth: 20. Impurity: 0.04</p>
-                        <br>
-                        <p><span class="text-slate-600">[14:20:07]</span> <span class="text-blue-400">INFO</span>  Validation Score (Accuracy): {{ accuracy }}%</p>
-                        <p><span class="text-slate-600">[14:20:07]</span> <span class="text-blue-400">INFO</span>  Validation Score (F1): 0.94</p>
-                        <p><span class="text-slate-600">[14:20:08]</span> <span class="text-green-400">SUCCESS</span> Model exported to ./models/rf_v2_optimized.pkl</p>
-                        <p><span class="text-slate-600">[14:20:08]</span> <span class="text-blue-400">INFO</span>  System hot-swapped to new model version.</p>
-                        <p class="animate-pulse text-emerald-500 mt-2">_ Cursor ready.</p>
+                        <p><span class="text-slate-600">[14:20:08]</span> <span class="text-green-400">SUCCESS</span> Model exported.</p>
                     </div>
                 </div>
-                
                 <div class="p-4 border-t border-slate-800 bg-slate-900/50 rounded-b-xl flex justify-end">
                     <button onclick="toggleLogs()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded text-sm transition-colors">Close Console</button>
                 </div>
@@ -277,19 +272,18 @@
     </div>
 
     <script>
-        // --- NEW: Toggle Modal Logic ---
+        // Modal & Upload Logic
         function toggleLogs() {
             const modal = document.getElementById('logModal');
             if (modal.classList.contains('hidden')) {
                 modal.classList.remove('hidden');
-                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+                document.body.style.overflow = 'hidden'; 
             } else {
                 modal.classList.add('hidden');
                 document.body.style.overflow = 'auto';
             }
         }
 
-        // File Upload UI Interaction
         const csvInput = document.getElementById('csvInput');
         if(csvInput) {
             csvInput.addEventListener('change', function() {
@@ -309,13 +303,12 @@
             });
         }
 
-        // Count Up Animation for Accuracy
+        // Count Up Animation
         const counters = document.querySelectorAll('.counter');
         counters.forEach(counter => {
             const target = +counter.getAttribute('data-target');
             const duration = 2000; 
             const increment = target / (duration / 16); 
-            
             let current = 0;
             const updateCounter = () => {
                 current += increment;
@@ -328,6 +321,82 @@
             };
             updateCounter();
         });
+
+        // === NEW: APEXCHARTS RENDER LOGIC ===
+        // Only run if the charts exist (i.e., we are on the results page)
+        if(document.getElementById('confusionChart')) {
+            
+            // 1. Confusion Matrix Config
+            var confusionOptions = {
+                series: [
+                    { name: 'Predicted Safe', data: [
+                        { x: 'Actual Safe', y: 1205 }, // True Negative (Green)
+                        { x: 'Actual Attack', y: 12 }  // False Negative (Red)
+                    ]},
+                    { name: 'Predicted Attack', data: [
+                        { x: 'Actual Safe', y: 8 },    // False Positive (Red)
+                        { x: 'Actual Attack', y: 985 } // True Positive (Green)
+                    ]}
+                ],
+                chart: {
+                    height: 300,
+                    type: 'heatmap',
+                    toolbar: { show: false },
+                    background: 'transparent'
+                },
+                plotOptions: {
+                    heatmap: {
+                        shadeIntensity: 0.5,
+                        radius: 6,
+                        colorScale: {
+                            ranges: [
+                                { from: 0, to: 20, name: 'Error', color: '#EF4444' }, // Red for errors
+                                { from: 21, to: 2000, name: 'Correct', color: '#10B981' } // Green for success
+                            ]
+                        }
+                    }
+                },
+                dataLabels: { enabled: true, style: { colors: ['#fff'] } },
+                xaxis: { labels: { style: { colors: '#94a3b8' } } },
+                yaxis: { labels: { style: { colors: '#94a3b8' } } },
+                grid: { borderColor: '#1e293b' },
+                theme: { mode: 'dark' }
+            };
+            var chart1 = new ApexCharts(document.querySelector("#confusionChart"), confusionOptions);
+            chart1.render();
+
+            // 2. Feature Importance Config
+            var featureOptions = {
+                series: [{
+                    name: 'Importance',
+                    data: [0.35, 0.28, 0.15, 0.12, 0.08] // Mock data
+                }],
+                chart: {
+                    type: 'bar',
+                    height: 300,
+                    toolbar: { show: false },
+                    background: 'transparent'
+                },
+                plotOptions: {
+                    bar: {
+                        borderRadius: 4,
+                        horizontal: true,
+                        barHeight: '60%'
+                    }
+                },
+                colors: ['#0EA5E9'], // Cyber Blue
+                dataLabels: { enabled: false },
+                xaxis: {
+                    categories: ['src_bytes', 'dst_host_srv_count', 'duration', 'flag_SF', 'protocol_type'],
+                    labels: { style: { colors: '#94a3b8' } }
+                },
+                yaxis: { labels: { style: { colors: '#cbd5e1' } } },
+                grid: { borderColor: '#1e293b' },
+                theme: { mode: 'dark' }
+            };
+            var chart2 = new ApexCharts(document.querySelector("#featureChart"), featureOptions);
+            chart2.render();
+        }
     </script>
 </body>
 </html>

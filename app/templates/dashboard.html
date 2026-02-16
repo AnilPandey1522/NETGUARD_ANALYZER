@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NetGuard Enterprise | Security Operations Center</title>
+    <title>NetGuard | Enterprise Ops</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -17,15 +17,10 @@
                         mono: ['JetBrains Mono', 'monospace'],
                     },
                     colors: {
-                        cyber: {
-                            bg: '#0B1120',      // Deepest background
-                            panel: '#151F32',   // Panel background
-                            border: '#2A3B55',  // Subtle borders
-                            primary: '#0EA5E9', // Electric Blue
-                            success: '#10B981', // Emerald
-                            danger: '#EF4444',  // Red
-                            warning: '#F59E0B', // Amber
-                            text: '#94A3B8'     // Muted text
+                        slate: {
+                            850: '#1e293b', 
+                            900: '#0f172a',
+                            950: '#020617',
                         }
                     }
                 }
@@ -33,327 +28,387 @@
         }
     </script>
     <style>
-        body {
-            background-color: #0B1120;
-            background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 30px 30px;
-        }
-        
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0B1120; }
-        ::-webkit-scrollbar-thumb { background: #2A3B55; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #3B82F6; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        body {
+            background-color: #0B1120; 
+            color: #cbd5e1;
+        }
 
         .glass-panel {
-            background: rgba(21, 31, 50, 0.7);
-            backdrop-filter: blur(8px);
+            background: rgba(30, 41, 59, 0.4); 
+            backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
-        /* Scanline Animation for "Live" feel */
-        .scanline::before {
-            content: " ";
-            display: block;
+        .neon-accent {
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+        }
+
+        /* Scan Line Animation for Terminal */
+        .scan-line {
+            width: 100%;
+            height: 2px;
+            background: rgba(16, 185, 129, 0.2);
             position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 2;
-            background-size: 100% 2px, 3px 100%;
-            pointer-events: none;
+            z-index: 10;
+            animation: scan 3s linear infinite;
+            pointer-events: none; 
+        }
+        @keyframes scan {
+            0% { top: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
         }
     </style>
 </head>
-<body class="text-slate-300 font-sans antialiased h-screen flex overflow-hidden">
+<body class="h-screen flex overflow-hidden selection:bg-cyan-500/30">
 
-    <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col z-20 hidden md:flex">
-        <div class="h-16 flex items-center px-6 border-b border-slate-800">
-            <div class="flex items-center gap-3 text-white">
-                <i class="fa-solid fa-shield-virus text-cyan-500 text-2xl"></i>
-                <div>
-                    <h1 class="font-bold text-lg tracking-tight leading-none">NetGuard</h1>
-                    <span class="text-[10px] text-slate-500 font-mono uppercase tracking-wider">Enterprise Ops</span>
-                </div>
+    <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col z-20">
+        <div class="h-16 flex items-center px-6 border-b border-slate-800 bg-slate-950/50">
+            <div class="w-8 h-8 rounded bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center mr-3 shadow-lg shadow-cyan-500/20">
+                <i class="fa-solid fa-shield-halved text-white text-sm"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-white tracking-wide text-lg">NetGuard</h1>
+                <p class="text-[10px] text-cyan-500 font-mono tracking-wider uppercase">Enterprise Ops</p>
             </div>
         </div>
 
-        <nav class="flex-1 py-6 px-3 space-y-1">
-            <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Modules</p>
+        <nav class="flex-1 py-6 px-3 space-y-1 overflow-y-auto">
+            <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Core Modules</p>
             
-            <a href="/" class="flex items-center gap-3 px-3 py-2 text-sm font-medium bg-cyan-500/10 text-cyan-400 rounded-lg border border-cyan-500/20">
-                <i class="fa-solid fa-grid-2 text-center w-5"></i>
-                Dashboard Overview
-            </a>
-            
-            <a href="/live" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-all group">
-                <div class="relative">
-                    <i class="fa-solid fa-wave-square text-center w-5 group-hover:text-cyan-400"></i>
-                    <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse border border-slate-900"></span>
-                </div>
-                Live Monitor
-            </a>
-            
-            <a href="/history" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-all group">
-                <i class="fa-solid fa-clock-rotate-left text-center w-5 group-hover:text-cyan-400"></i>
-                Event Logs
+            <a href="/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 group transition-all">
+                <i class="fa-solid fa-chart-line w-5 text-center"></i>
+                <span class="text-sm font-medium">Dashboard Overview</span>
             </a>
 
-            <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-8 mb-2">System AI</p>
+            <a href="/live" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all group">
+                <i class="fa-solid fa-satellite-dish w-5 text-center group-hover:text-cyan-400 transition-colors"></i>
+                <span class="text-sm font-medium">Live Monitor</span>
+            </a>
             
-            <a href="/retrain" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-all group">
-                <i class="fa-solid fa-brain text-center w-5 group-hover:text-purple-400"></i>
-                Model Training
+            <a href="/history" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all group">
+                <i class="fa-solid fa-clock-rotate-left w-5 text-center group-hover:text-cyan-400 transition-colors"></i>
+                <span class="text-sm font-medium">Event Logs</span>
+            </a>
+
+            <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-6 mb-2">Neural Engine</p>
+
+            <a href="/retrain" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all group">
+                <i class="fa-solid fa-brain w-5 text-center group-hover:text-purple-400 transition-colors"></i>
+                <span class="text-sm font-medium">Model Training</span>
+            </a>
+
+            <a href="/configuration" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all group">
+                <i class="fa-solid fa-sliders w-5 text-center group-hover:text-cyan-400 transition-colors"></i>
+                <span class="text-sm font-medium">Configuration</span>
             </a>
         </nav>
-
-        <div class="p-4 border-t border-slate-800 bg-slate-950/50">
-            <div class="flex items-center gap-3 mb-2">
-                <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                <span class="text-xs font-mono text-emerald-500">SYSTEM ONLINE</span>
-            </div>
-            <div class="text-[10px] text-slate-600 font-mono">
-                UPTIME: 14D 03H 12M<br>
-                VER: 2.4.1 (STABLE)
+        
+        <div class="p-4 border-t border-slate-800 bg-slate-950/30">
+            <div class="flex items-center gap-3">
+                <div class="relative">
+                    <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                    <div class="w-2 h-2 rounded-full bg-emerald-500 absolute top-0 left-0 animate-ping"></div>
+                </div>
+                <div>
+                    <p class="text-xs font-bold text-emerald-500">SYSTEM ONLINE</p>
+                    <div class="flex items-center justify-between gap-4 mt-1">
+                        <span class="text-[10px] text-slate-500 font-mono">UPTIME:</span>
+                        <span class="text-[10px] text-slate-400 font-mono">14D 03H 12M</span>
+                    </div>
+                    <div class="flex items-center justify-between gap-4">
+                        <span class="text-[10px] text-slate-500 font-mono">VERSION:</span>
+                        <span class="text-[10px] text-slate-400 font-mono">2.4.1 (STABLE)</span>
+                    </div>
+                </div>
             </div>
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col relative overflow-hidden">
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative">
         
-        <header class="h-16 bg-slate-900/80 backdrop-blur border-b border-slate-800 flex items-center justify-between px-6 z-10">
-            <div class="flex items-center gap-4">
-                <span class="text-slate-400 text-sm"><i class="fa-solid fa-house text-xs mr-2"></i> / Operations / Dashboard</span>
+        <header class="h-16 border-b border-slate-800 bg-slate-900/50 flex items-center justify-between px-8 z-10 backdrop-blur-sm">
+            <div class="flex items-center text-sm text-slate-400">
+                <span class="text-cyan-500 font-mono mr-2">root@netguard-soc:~</span>
+                <span class="mx-2">/</span>
+                <span class="text-white">dashboard</span>
             </div>
-
+            
             <div class="flex items-center gap-4">
-                <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-slate-800 rounded border border-slate-700">
-                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                    <span class="text-xs font-mono text-slate-300" id="clock">LOADING TIME...</span>
+                <div class="bg-slate-800 rounded px-3 py-1 border border-slate-700 flex items-center gap-2">
+                    <i class="fa-regular fa-clock text-xs text-slate-400"></i>
+                    <span class="text-xs font-mono text-slate-300" id="clock">00:00:00</span>
+                    <span class="text-[10px] bg-slate-700 px-1 rounded text-slate-400">NPT</span>
                 </div>
                 
-                <button class="w-8 h-8 rounded bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 transition-colors">
-                    <i class="fa-solid fa-bell"></i>
+                <button class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-colors relative">
+                    <i class="fa-solid fa-bell text-slate-400 text-xs"></i>
+                    <span class="absolute top-2 right-2.5 w-1.5 h-1.5 bg-red-500 rounded-full border border-slate-800"></span>
                 </button>
-                <div class="h-8 w-8 rounded bg-cyan-600 flex items-center justify-center text-white text-xs font-bold shadow-[0_0_10px_rgba(8,145,178,0.5)]">
-                    AD
+                <div class="w-8 h-8 rounded bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-white text-xs font-bold shadow-lg shadow-blue-500/20">
+                    KG
                 </div>
             </div>
         </header>
 
-        <div class="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth">
+        <div class="flex-1 overflow-y-auto p-8 scroll-smooth">
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl relative overflow-hidden group hover:border-cyan-500/30 transition-all">
-                    <div class="flex justify-between items-start mb-2">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="glass-panel p-5 rounded-xl relative overflow-hidden group hover:border-cyan-500/30 transition-colors">
+                    <div class="flex justify-between items-start mb-4">
                         <div>
-                            <p class="text-xs font-mono text-slate-500 uppercase">Total Packets Scanned</p>
-                            <h3 class="text-2xl font-bold text-white mt-1">{{ history|length * 1250 }}</h3> </div>
-                        <div class="p-2 bg-blue-500/10 rounded text-blue-400">
+                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Packets Scanned</p>
+                            <h3 class="text-2xl font-bold text-white mt-1">{{ "{:,}".format(packets_scanned) if packets_scanned is defined else '0' }}</h3>
+                        </div>
+                        <div class="w-8 h-8 rounded bg-cyan-500/10 flex items-center justify-center text-cyan-400">
                             <i class="fa-solid fa-network-wired"></i>
                         </div>
                     </div>
-                    <div class="h-1 w-full bg-slate-800 rounded-full overflow-hidden mt-2">
-                        <div class="h-full bg-blue-500 w-[70%]"></div>
+                    <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-cyan-500 h-full rounded-full" style="width: 75%"></div>
                     </div>
+                    <p class="text-[10px] text-right mt-2 text-cyan-400 font-mono">LIVE</p>
                 </div>
 
-                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl relative overflow-hidden group hover:border-red-500/30 transition-all">
-                    <div class="flex justify-between items-start mb-2">
+                <div class="glass-panel p-5 rounded-xl relative overflow-hidden group hover:border-red-500/30 transition-colors">
+                    <div class="flex justify-between items-start mb-4">
                         <div>
-                            <p class="text-xs font-mono text-slate-500 uppercase">Threats Neutralized</p>
-                            {% set threat_count = history | selectattr("status", "equalto", "Danger") | list | length %}
-                            <h3 class="text-2xl font-bold text-white mt-1 group-hover:text-red-400 transition-colors">{{ threat_count }}</h3>
+                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Threats Blocked</p>
+                            <h3 class="text-2xl font-bold text-white mt-1">{{ threat_count if threat_count is defined else '0' }}</h3>
                         </div>
-                        <div class="p-2 bg-red-500/10 rounded text-red-400">
-                            <i class="fa-solid fa-virus-slash"></i>
+                        <div class="w-8 h-8 rounded bg-red-500/10 flex items-center justify-center text-red-400">
+                            <i class="fa-solid fa-shield-virus"></i>
                         </div>
                     </div>
-                    <div class="h-1 w-full bg-slate-800 rounded-full overflow-hidden mt-2">
-                        <div class="h-full bg-red-500 w-[15%]"></div>
+                    <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-red-500 h-full rounded-full" style="width: {{ '20' if threat_count > 0 else '0' }}%"></div>
                     </div>
+                    <p class="text-[10px] text-right mt-2 text-red-400 font-mono">CRIT</p>
                 </div>
 
-                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl relative overflow-hidden">
-                    <div class="flex justify-between items-start mb-2">
+                <div class="glass-panel p-5 rounded-xl relative overflow-hidden group hover:border-purple-500/30 transition-colors">
+                    <div class="flex justify-between items-start mb-4">
                         <div>
-                            <p class="text-xs font-mono text-slate-500 uppercase">AI Confidence</p>
-                            <h3 class="text-2xl font-bold text-white mt-1">99.2%</h3>
+                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">AI Confidence</p>
+                            <h3 class="text-2xl font-bold text-white mt-1">98.2%</h3>
                         </div>
-                        <div class="p-2 bg-purple-500/10 rounded text-purple-400">
+                        <div class="w-8 h-8 rounded bg-purple-500/10 flex items-center justify-center text-purple-400">
                             <i class="fa-solid fa-brain"></i>
                         </div>
                     </div>
-                    <div class="h-1 w-full bg-slate-800 rounded-full overflow-hidden mt-2">
-                        <div class="h-full bg-purple-500 w-[99%]"></div>
+                    <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-full rounded-full" style="width: 99%"></div>
                     </div>
+                    <p class="text-[10px] text-right mt-2 text-purple-400 font-mono">HIGH</p>
                 </div>
 
-                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
-                    <div class="flex justify-between items-start mb-2">
+                <div class="glass-panel p-5 rounded-xl relative overflow-hidden group hover:border-emerald-500/30 transition-colors">
+                    <div class="flex justify-between items-start mb-4">
                         <div>
-                            <p class="text-xs font-mono text-slate-500 uppercase">Engine Load</p>
-                            <h3 class="text-2xl font-bold text-emerald-400 mt-1">Optimal</h3>
+                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Engine Status</p>
+                            <h3 class="text-xl font-bold text-emerald-400 mt-1 uppercase">Optimal</h3>
                         </div>
-                        <div class="p-2 bg-emerald-500/10 rounded text-emerald-400">
-                            <i class="fa-solid fa-server"></i>
+                        <div class="flex gap-1">
+                            <div class="w-1.5 h-3 bg-slate-700 rounded-sm"></div>
+                            <div class="w-1.5 h-3 bg-slate-700 rounded-sm"></div>
+                            <div class="w-1.5 h-3 bg-emerald-500 rounded-sm shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
                         </div>
                     </div>
                     <div class="flex gap-1 mt-3">
-                        <div class="h-1.5 flex-1 bg-emerald-500 rounded-full"></div>
-                        <div class="h-1.5 flex-1 bg-emerald-500 rounded-full"></div>
-                        <div class="h-1.5 flex-1 bg-emerald-500 rounded-full"></div>
-                        <div class="h-1.5 flex-1 bg-slate-700 rounded-full"></div>
+                        <div class="h-1 flex-1 bg-emerald-500 rounded-full opacity-100"></div>
+                        <div class="h-1 flex-1 bg-emerald-500 rounded-full opacity-60"></div>
+                        <div class="h-1 flex-1 bg-emerald-500 rounded-full opacity-30"></div>
+                        <div class="h-1 flex-1 bg-emerald-500 rounded-full opacity-10"></div>
                     </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 h-auto lg:h-[450px]">
                 
-                <div class="lg:col-span-2 bg-slate-900/50 border border-slate-800 rounded-xl overflow-hidden backdrop-blur flex flex-col">
-                    <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-900">
-                        <h2 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-magnifying-glass-chart text-cyan-500"></i>
-                            Forensic Ingestion
-                        </h2>
-                        <span class="text-[10px] font-mono text-slate-500 bg-slate-800 px-2 py-1 rounded">PCAP / PCAPNG</span>
+                <div class="lg:col-span-5 glass-panel rounded-xl p-6 flex flex-col relative group">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass-chart text-cyan-400"></i>
+                            <h3 class="font-bold text-white">Forensic Ingestion</h3>
+                        </div>
+                        <div class="flex gap-2">
+                            <span class="text-[10px] font-mono border border-slate-700 px-2 py-0.5 rounded text-slate-400">PCAP</span>
+                            <span class="text-[10px] font-mono border border-slate-700 px-2 py-0.5 rounded text-slate-400">JSON</span>
+                        </div>
+                    </div>
+
+                    <form action="/upload" method="post" enctype="multipart/form-data" class="flex-1 flex flex-col">
+                        <div class="flex-1 border-2 border-dashed border-slate-700 rounded-lg bg-slate-900/50 hover:bg-slate-800/50 hover:border-cyan-500/50 transition-all cursor-pointer relative group/upload overflow-hidden">
+                            
+                            <input type="file" name="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" onchange="document.getElementById('file-label').innerText = this.files[0].name">
+                            
+                            <div class="absolute inset-0 flex flex-col items-center justify-center z-10 pointer-events-none">
+                                <div class="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center mb-4 group-hover/upload:scale-110 transition-transform shadow-lg">
+                                    <i class="fa-solid fa-cloud-arrow-up text-2xl text-cyan-500"></i>
+                                </div>
+                                <p id="file-label" class="text-sm font-medium text-slate-300">Drag & Drop capture file</p>
+                                <p class="text-xs text-slate-500 mt-2">Supports .pcap, .pcapng, .log</p>
+                            </div>
+
+                            <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-cyan-500/5 to-transparent pointer-events-none"></div>
+                        </div>
+
+                        <button type="submit" class="mt-4 w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-3 px-4 rounded-lg shadow-lg shadow-cyan-900/20 transition-all flex items-center justify-center gap-2">
+                            <span>INITIATE SCAN SEQUENCE</span>
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="lg:col-span-4 glass-panel rounded-xl p-6 flex flex-col relative group">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-globe text-purple-400"></i>
+                            <h3 class="font-bold text-white">Global Threat Intel</h3>
+                        </div>
+                        <span class="text-[10px] font-mono bg-purple-500/10 text-purple-400 border border-purple-500/20 px-2 py-0.5 rounded">API ACTIVE</span>
+                    </div>
+
+                    <div class="flex gap-2 mb-4 bg-slate-900/50 p-1 rounded-lg">
+                        <button onclick="switchTab('url')" id="btn-url" class="flex-1 py-1.5 text-xs font-bold rounded text-white bg-slate-700 shadow transition-all">URL SCAN</button>
+                        <button onclick="switchTab('hash')" id="btn-hash" class="flex-1 py-1.5 text-xs font-bold rounded text-slate-400 hover:text-white hover:bg-slate-800 transition-all">FILE HASH</button>
+                    </div>
+
+                    <form id="form-url" action="/scan-url" method="post" class="flex-1 flex flex-col justify-center space-y-4">
+                        <div class="text-center mb-2">
+                            <div class="w-12 h-12 rounded-full bg-purple-500/10 flex items-center justify-center mx-auto mb-3">
+                                <i class="fa-solid fa-link text-purple-400 text-xl"></i>
+                            </div>
+                            <p class="text-xs text-slate-400">Verify suspicious links against 70+ security vendors.</p>
+                        </div>
+                        <div class="relative">
+                            <i class="fa-solid fa-globe absolute left-3 top-3.5 text-slate-500 text-xs"></i>
+                            <input type="text" name="url" placeholder="https://example.com" class="w-full bg-slate-950 border border-slate-700 rounded-lg py-2.5 pl-9 pr-4 text-sm text-white focus:outline-none focus:border-purple-500 transition-colors">
+                        </div>
+                        <button type="submit" class="w-full border border-purple-500/30 text-purple-400 hover:bg-purple-500/10 font-bold py-2.5 rounded-lg transition-all text-sm flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-radar"></i> SCAN URL
+                        </button>
+                    </form>
+
+                    <form id="form-hash" action="/scan-hash" method="post" class="flex-1 flex flex-col justify-center space-y-4 hidden">
+                        <div class="text-center mb-2">
+                            <div class="w-12 h-12 rounded-full bg-purple-500/10 flex items-center justify-center mx-auto mb-3">
+                                <i class="fa-solid fa-fingerprint text-purple-400 text-xl"></i>
+                            </div>
+                            <p class="text-xs text-slate-400">Check MD5, SHA-1 or SHA-256 hashes.</p>
+                        </div>
+                        <div class="relative">
+                            <i class="fa-solid fa-hashtag absolute left-3 top-3.5 text-slate-500 text-xs"></i>
+                            <input type="text" name="hash" placeholder="e.g. 5b42c..." class="w-full bg-slate-950 border border-slate-700 rounded-lg py-2.5 pl-9 pr-4 text-sm text-white focus:outline-none focus:border-purple-500 transition-colors">
+                        </div>
+                        <button type="submit" class="w-full border border-purple-500/30 text-purple-400 hover:bg-purple-500/10 font-bold py-2.5 rounded-lg transition-all text-sm flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-file-shield"></i> CHECK HASH
+                        </button>
+                    </form>
+                </div>
+
+                <div class="lg:col-span-3 bg-slate-950 rounded-xl border border-slate-800 p-0 flex flex-col font-mono text-xs overflow-hidden relative">
+                    <div class="bg-slate-900 px-3 py-2 flex items-center justify-between border-b border-slate-800">
+                        <span class="text-emerald-500 font-bold">/VAR/LOG/SYSLOG</span>
+                        <div class="flex gap-1.5">
+                            <div class="w-2 h-2 rounded-full bg-slate-700"></div>
+                            <div class="w-2 h-2 rounded-full bg-slate-700"></div>
+                            <div class="w-2 h-2 rounded-full bg-slate-700"></div>
+                        </div>
                     </div>
                     
-                    <div class="p-8 flex-1 flex flex-col justify-center items-center relative">
-                        <div class="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
-
-                        <form action="/upload" method="POST" enctype="multipart/form-data" id="uploadForm" class="w-full max-w-lg z-10">
-                            <div class="relative group cursor-pointer">
-                                <input type="file" name="file" id="fileInput" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" required>
-                                
-                                <div id="drop-zone" class="border border-dashed border-slate-600 bg-slate-900/80 rounded-lg p-10 text-center transition-all group-hover:border-cyan-500 group-hover:shadow-[0_0_15px_rgba(6,182,212,0.15)]">
-                                    <div class="w-16 h-16 mx-auto bg-slate-800 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                        <i class="fa-solid fa-upload text-2xl text-slate-400 group-hover:text-cyan-400"></i>
-                                    </div>
-                                    <h3 id="upload-text" class="text-lg font-medium text-slate-200">Drop capture file here</h3>
-                                    <p class="text-xs text-slate-500 mt-2 font-mono">System will auto-extract features</p>
-                                </div>
-                            </div>
-                            
-                            <div id="file-details" class="hidden mt-4 bg-slate-800/50 border border-slate-700 rounded p-3 flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <i class="fa-regular fa-file-code text-cyan-400"></i>
-                                    <span id="filename-display" class="text-sm font-mono text-slate-300">filename.pcap</span>
-                                </div>
-                                <span class="text-[10px] text-emerald-400 font-bold uppercase">Ready</span>
-                            </div>
-
-                            <button type="submit" id="submitBtn" class="mt-6 w-full py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold rounded shadow-lg shadow-cyan-900/20 flex items-center justify-center gap-2 transition-all">
-                                <span>Initiate Scan Sequence</span>
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col">
-                    <div class="px-6 py-4 border-b border-slate-800 bg-slate-900">
-                        <h2 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-terminal text-emerald-500"></i>
-                            Live System Output
-                        </h2>
-                    </div>
-                    <div class="flex-1 bg-black p-4 font-mono text-xs overflow-y-auto h-64 lg:h-auto space-y-2 opacity-90">
-                        <div class="text-slate-500 border-b border-slate-800 pb-2 mb-2">root@netguard-ai:~$ tail -f /var/log/syslog</div>
+                    <div class="flex-1 p-3 text-slate-400 space-y-1 relative overflow-hidden">
+                        <div class="scan-line"></div>
                         
-                        <div class="flex gap-2">
-                            <span class="text-purple-400">[10:42:01]</span>
-                            <span class="text-slate-300">Daemon initialized...</span>
-                        </div>
-                        <div class="flex gap-2">
-                            <span class="text-purple-400">[10:42:02]</span>
-                            <span class="text-slate-300">Loading RF_Model_v2.pkl... <span class="text-emerald-500">OK</span></span>
-                        </div>
-                        <div class="flex gap-2">
-                            <span class="text-purple-400">[10:42:05]</span>
-                            <span class="text-slate-300">Listening on eth0 (Promiscuous Mode)</span>
-                        </div>
-                        {% if history %}
-                            <div class="flex gap-2">
-                                <span class="text-purple-400">[{{ history[0].timestamp.strftime('%H:%M:%S') }}]</span>
-                                <span class="text-cyan-300">Processed file: {{ history[0].filename }}</span>
+                        <p class="text-slate-500">$ ./start_daemon.sh</p>
+                        <p class="text-emerald-500 font-bold">Initializing NetGuard Core v2.4.1...</p>
+                        <p class="text-slate-600 mb-2">--- RECENT ACTIVITY ---</p>
+                        
+                        <div id="terminal-content">
+                            {% for record in history[:6] %}
+                            <div class="mb-1">
+                                <span class="text-purple-400">[{{ record.timestamp.strftime('%H:%M:%S') }}]</span>
+                                <span class="text-cyan-600">SCAN:</span>
+                                <span class="text-slate-300">{{ record.filename[:20] }}...</span>
+                                <span class="{{ 'text-red-500 font-bold' if 'Danger' in record.status else 'text-emerald-500' }}">>> {{ record.status }}</span>
                             </div>
-                            <div class="flex gap-2">
-                                <span class="text-purple-400">[{{ history[0].timestamp.strftime('%H:%M:%S') }}]</span>
-                                <span class="text-slate-300">Result: <span class="{{ 'text-red-500 font-bold' if history[0].status == 'Danger' else 'text-emerald-500' }}">{{ history[0].status|upper }}</span></span>
-                            </div>
-                        {% endif %}
-                        <div class="flex gap-2 animate-pulse">
-                            <span class="text-slate-600">_</span>
+                            {% endfor %}
                         </div>
+
+                        <p class="mt-2 text-emerald-500"><span class="animate-pulse">➜</span> <span class="w-2 h-4 bg-emerald-500 inline-block align-middle animate-pulse"></span></p>
                     </div>
                 </div>
+
             </div>
 
-            <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-                <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center">
-                    <h2 class="text-sm font-bold text-white uppercase tracking-wider">Recent Analysis Log</h2>
+            <div class="mt-8 glass-panel rounded-xl border border-slate-800 overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-900/30">
+                    <div class="flex items-center gap-3">
+                        <div class="w-1 h-4 bg-cyan-500 rounded-full"></div>
+                        <h3 class="font-bold text-white text-sm tracking-wide">RECENT ANALYSIS LOG</h3>
+                    </div>
                     <div class="flex gap-2">
-                        <button class="px-2 py-1 text-xs bg-slate-800 text-slate-400 rounded hover:bg-slate-700">Filter</button>
-                        <button class="px-2 py-1 text-xs bg-slate-800 text-slate-400 rounded hover:bg-slate-700">Export CSV</button>
+                        <div class="relative">
+                            <i class="fa-solid fa-search absolute left-3 top-2.5 text-slate-500 text-xs"></i>
+                            <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search logs..." class="bg-slate-950 border border-slate-700 rounded text-xs py-2 pl-8 pr-3 text-slate-300 focus:outline-none focus:border-cyan-500">
+                        </div>
+                        <button onclick="filterTable()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded text-xs text-slate-300 flex items-center gap-2">
+                            <i class="fa-solid fa-filter"></i> Filter
+                        </button>
+                        <button onclick="downloadCSV()" class="px-3 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 rounded text-xs text-cyan-400 flex items-center gap-2">
+                            <i class="fa-solid fa-download"></i> CSV
+                        </button>
                     </div>
                 </div>
-                
+
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead class="bg-slate-950 text-xs font-mono uppercase text-slate-500">
-                            <tr>
-                                <th class="px-6 py-3 border-b border-slate-800">Status</th>
-                                <th class="px-6 py-3 border-b border-slate-800">File Signature</th>
-                                <th class="px-6 py-3 border-b border-slate-800">Case ID</th>
-                                <th class="px-6 py-3 border-b border-slate-800">Timestamp</th>
-                                <th class="px-6 py-3 border-b border-slate-800 text-right">Actions</th>
+                    <table class="w-full text-left border-collapse" id="logTable">
+                        <thead>
+                            <tr class="bg-slate-900/50 text-[10px] uppercase tracking-wider text-slate-500 font-bold border-b border-slate-800">
+                                <th class="px-6 py-3">Status</th>
+                                <th class="px-6 py-3">File Signature</th>
+                                <th class="px-6 py-3">Hash ID</th>
+                                <th class="px-6 py-3">Timestamp</th>
+                                <th class="px-6 py-3 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="text-sm divide-y divide-slate-800">
-                            {% if history %}
-                                {% for scan in history[:10] %}
-                                <tr class="group hover:bg-slate-800/50 transition-colors">
-                                    <td class="px-6 py-3">
-                                        {% if scan.status == 'Danger' %}
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-red-500/10 text-red-500 border border-red-500/20">
-                                                <span class="w-1.5 h-1.5 bg-red-500 rounded-full mr-1.5 animate-pulse"></span> THREAT
-                                            </span>
-                                        {% else %}
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                                                SECURE
-                                            </span>
-                                        {% endif %}
-                                    </td>
-                                    <td class="px-6 py-3">
-                                        <div class="flex items-center gap-2">
-                                            <i class="fa-regular fa-file text-slate-600"></i>
-                                            <span class="text-slate-300 font-medium">{{ scan.filename }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-3 font-mono text-xs text-slate-500">
-                                        {{ scan._id|string|truncate(10, True, '') }}
-                                    </td>
-                                    <td class="px-6 py-3 font-mono text-xs text-slate-400">
-                                        {{ scan.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
-                                    </td>
-                                    <td class="px-6 py-3 text-right">
-                                        <a href="{{ url_for('main.show_report', report_id=scan._id) }}" class="text-cyan-500 hover:text-cyan-400 text-xs font-medium hover:underline">
-                                            VIEW REPORT
-                                        </a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            {% else %}
-                                <tr>
-                                    <td colspan="5" class="px-6 py-8 text-center text-slate-500">
-                                        No logs found. System ready for input.
-                                    </td>
-                                </tr>
-                            {% endif %}
+                        <tbody class="divide-y divide-slate-800 text-xs">
+                            {% for record in history %}
+                            <tr class="hover:bg-slate-800/30 transition-colors group">
+                                <td class="px-6 py-4">
+                                    {% if 'Danger' in record.status %}
+                                        <span class="bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-1 rounded font-bold flex items-center w-fit gap-2">
+                                            <div class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></div> THREAT
+                                        </span>
+                                    {% else %}
+                                        <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-1 rounded font-bold flex items-center w-fit gap-2">
+                                            <i class="fa-solid fa-check"></i> CLEAN
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 font-mono text-slate-300 flex items-center gap-3">
+                                    <i class="fa-regular fa-file text-slate-500"></i>
+                                    {{ record.filename }}
+                                </td>
+                                <td class="px-6 py-4 font-mono text-slate-500">{{ record._id }}</td>
+                                <td class="px-6 py-4 text-slate-400">{{ record.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                <td class="px-6 py-4 text-right">
+                                    <a href="/report/{{ record._id }}" class="text-cyan-500 hover:text-cyan-400 font-bold text-[10px] uppercase tracking-wide group-hover:underline">View Report <i class="fa-solid fa-arrow-right ml-1"></i></a>
+                                </td>
+                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -363,57 +418,96 @@
     </main>
 
     <script>
-        // 1. File Upload Interaction
-        const fileInput = document.getElementById('fileInput');
-        const fileDetails = document.getElementById('file-details');
-        const filenameDisplay = document.getElementById('filename-display');
-        const uploadText = document.getElementById('upload-text');
-        const submitBtn = document.getElementById('submitBtn');
-        const uploadForm = document.getElementById('uploadForm');
-
-        fileInput.addEventListener('change', () => {
-            if (fileInput.files.length > 0) {
-                filenameDisplay.textContent = fileInput.files[0].name;
-                fileDetails.classList.remove('hidden');
-                uploadText.classList.add('opacity-50');
-            }
-        });
-
-        uploadForm.addEventListener('submit', () => {
-            submitBtn.innerHTML = '<i class="fa-solid fa-gear fa-spin"></i> Processing Data...';
-            submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
-        });
-
-        // 2. Real-time Clock (FORCED NEPAL TIME - NPT)
         function updateClock() {
-            const clockElement = document.getElementById('clock');
-            if (!clockElement) return;
-
-            // 1. Get current time
             const now = new Date();
-            
-            // 2. Convert to UTC milliseconds
-            const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
-
-            // 3. Add Nepal Offset (5 hours 45 minutes)
-            // 5.75 hours * 3600 seconds/hr * 1000 ms/sec
-            const nepalOffset = 5.75 * 3600 * 1000;
-            const nepalDate = new Date(utcTime + nepalOffset);
-
-            // 4. Format to 12-hour AM/PM
-            let hours = nepalDate.getHours();
-            const minutes = nepalDate.getMinutes().toString().padStart(2, '0');
-            const seconds = nepalDate.getSeconds().toString().padStart(2, '0');
-            
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12;
-            hours = hours ? hours : 12; // "0" hour should be "12"
-
-            clockElement.innerText = `${hours}:${minutes}:${seconds} ${ampm} NPT`;
+            document.getElementById('clock').innerText = now.toLocaleTimeString('en-US', { hour12: false });
         }
-
         setInterval(updateClock, 1000);
         updateClock();
+
+        // 1. SEARCH FUNCTION
+        function filterTable() {
+            var input, filter, table, tr, tdFile, tdHash, i, txtValueFile, txtValueHash;
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("logTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 1; i < tr.length; i++) {
+                tdFile = tr[i].getElementsByTagName("td")[1]; // Filename Column
+                tdHash = tr[i].getElementsByTagName("td")[2]; // Hash ID Column
+                
+                if (tdFile || tdHash) {
+                    txtValueFile = tdFile.textContent || tdFile.innerText;
+                    txtValueHash = tdHash.textContent || tdHash.innerText;
+                    
+                    if (txtValueFile.toUpperCase().indexOf(filter) > -1 || txtValueHash.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }       
+            }
+        }
+
+        // 2. CSV DOWNLOAD FUNCTION
+        function downloadCSV() {
+            var csv = [];
+            var rows = document.querySelectorAll("table tr");
+            
+            for (var i = 0; i < rows.length; i++) {
+                var row = [], cols = rows[i].querySelectorAll("td, th");
+                
+                // Only download visible rows (respects the search filter)
+                if (rows[i].style.display !== 'none') {
+                    for (var j = 0; j < cols.length; j++) {
+                        // Clean up text
+                        var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, "").trim();
+                        // Remove "View Report" text from last column
+                        if(data.includes("View Report")) data = ""; 
+                        row.push('"' + data + '"');
+                    }
+                    csv.push(row.join(","));
+                }
+            }
+
+            var csvFile = new Blob([csv.join("\n")], {type: "text/csv"});
+            var downloadLink = document.createElement("a");
+            downloadLink.download = "netguard_logs.csv";
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+            downloadLink.style.display = "none";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+        }
+
+        // TAB SWITCHER for Threat Intel Box
+        function switchTab(tab) {
+            const btnUrl = document.getElementById('btn-url');
+            const btnHash = document.getElementById('btn-hash');
+            const formUrl = document.getElementById('form-url');
+            const formHash = document.getElementById('form-hash');
+
+            if (tab === 'url') {
+                formUrl.classList.remove('hidden');
+                formHash.classList.add('hidden');
+                
+                btnUrl.classList.add('bg-slate-700', 'text-white', 'shadow');
+                btnUrl.classList.remove('text-slate-400', 'hover:bg-slate-800');
+                
+                btnHash.classList.remove('bg-slate-700', 'text-white', 'shadow');
+                btnHash.classList.add('text-slate-400', 'hover:bg-slate-800');
+            } else {
+                formUrl.classList.add('hidden');
+                formHash.classList.remove('hidden');
+                
+                btnHash.classList.add('bg-slate-700', 'text-white', 'shadow');
+                btnHash.classList.remove('text-slate-400', 'hover:bg-slate-800');
+                
+                btnUrl.classList.remove('bg-slate-700', 'text-white', 'shadow');
+                btnUrl.classList.add('text-slate-400', 'hover:bg-slate-800');
+            }
+        }
     </script>
 </body>
 </html>

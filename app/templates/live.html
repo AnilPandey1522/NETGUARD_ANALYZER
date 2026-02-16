@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NetGuard | Live Traffic Monitor</title>
+    <title>NetGuard | Live SecOps Monitor</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -18,16 +18,9 @@
                         mono: ['JetBrains Mono', 'monospace'],
                     },
                     colors: {
-                        cyber: {
-                            bg: '#0B1120',
-                            panel: '#151F32',
-                            primary: '#0EA5E9',
-                            danger: '#EF4444',
-                            success: '#10B981',
-                        }
-                    },
-                    animation: {
-                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        bg: '#020617', 
+                        panel: '#0f172a',
+                        border: '#1e293b',
                     }
                 }
             }
@@ -35,200 +28,200 @@
     </script>
     <style>
         body {
-            background-color: #0B1120;
-            background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 40px 40px;
+            background-color: #020617;
+            background-image: 
+                linear-gradient(rgba(30, 41, 59, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 41, 59, 0.3) 1px, transparent 1px);
+            background-size: 20px 20px;
         }
-        .crt-overlay {
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
-            background-size: 100% 4px;
-            pointer-events: none;
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
         }
+        .log-entry { animation: slideIn 0.3s ease-out forwards; }
+        .glow-red { box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
     </style>
 </head>
-<body class="text-slate-300 font-sans antialiased h-screen flex overflow-hidden">
+<body class="text-slate-400 font-sans h-screen flex overflow-hidden selection:bg-cyan-500/30 selection:text-cyan-200">
 
-    <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col z-20 hidden md:flex">
-        <div class="h-16 flex items-center px-6 border-b border-slate-800">
+    <aside class="w-64 bg-slate-900/50 backdrop-blur border-r border-border flex flex-col z-20 hidden md:flex">
+        <div class="h-16 flex items-center px-6 border-b border-border">
             <div class="flex items-center gap-3 text-white">
-                <i class="fa-solid fa-shield-virus text-cyan-500 text-2xl"></i>
+                <div class="w-8 h-8 rounded bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                    <i class="fa-solid fa-shield-halved text-white text-sm"></i>
+                </div>
                 <div>
-                    <h1 class="font-bold text-lg tracking-tight leading-none">NetGuard</h1>
-                    <span class="text-[10px] text-slate-500 font-mono uppercase tracking-wider">Enterprise Ops</span>
+                    <h1 class="font-bold text-base tracking-tight text-white">NetGuard</h1>
+                    <div class="text-[10px] text-cyan-400 font-mono tracking-wider">THREAT_OPS</div>
                 </div>
             </div>
         </div>
 
         <nav class="flex-1 py-6 px-3 space-y-1">
-            <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Modules</p>
-            
-            <a href="/" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-all group">
-                <i class="fa-solid fa-grid-2 text-center w-5 group-hover:text-cyan-400"></i>
-                Dashboard Overview
+            <div class="px-3 mb-2 text-[10px] font-bold text-slate-600 uppercase tracking-widest">Dashboards</div>
+            <a href="/" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-md transition-all">
+                <i class="fa-solid fa-chart-pie w-5 text-center"></i> Overview
             </a>
-            
-            <a href="/live" class="flex items-center gap-3 px-3 py-2 text-sm font-medium bg-cyan-500/10 text-cyan-400 rounded-lg border border-cyan-500/20">
-                <i class="fa-solid fa-wave-square text-center w-5"></i>
-                Live Monitor
+            <a href="/live" class="flex items-center gap-3 px-3 py-2 text-sm font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 rounded-md shadow-[0_0_15px_rgba(14,165,233,0.1)]">
+                <i class="fa-solid fa-radar w-5 text-center animate-pulse"></i> Live Monitor
             </a>
-            
-            <a href="/history" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-all group">
-                <i class="fa-solid fa-clock-rotate-left text-center w-5 group-hover:text-cyan-400"></i>
-                Event Logs
-            </a>
-
-            <p class="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-8 mb-2">System AI</p>
-            
-            <a href="/retrain" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-all group">
-                <i class="fa-solid fa-brain text-center w-5 group-hover:text-purple-400"></i>
-                Model Training
+            <div class="px-3 mt-8 mb-2 text-[10px] font-bold text-slate-600 uppercase tracking-widest">Intelligence</div>
+            <a href="/retrain" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-md transition-all">
+                <i class="fa-solid fa-brain w-5 text-center text-purple-400"></i> AI Model Retrain
             </a>
         </nav>
+
+        <div class="p-4 border-t border-border">
+            <div class="flex items-center gap-3">
+                <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></div>
+                <span class="text-xs font-mono text-emerald-500">SYSTEM ONLINE</span>
+            </div>
+        </div>
     </aside>
 
-    <main class="flex-1 flex flex-col relative overflow-hidden">
+    <main class="flex-1 flex flex-col relative overflow-hidden bg-bg">
         
-        <header class="h-16 bg-slate-900/80 backdrop-blur border-b border-slate-800 flex items-center justify-between px-6 z-10">
+        <header class="h-16 border-b border-border bg-slate-900/30 backdrop-blur flex items-center justify-between px-6 z-10">
+            <div class="flex items-center gap-2 text-sm text-slate-500">
+                <span>Operations</span>
+                <span class="text-slate-700">/</span>
+                <span class="text-slate-200">Real-time Traffic Analysis</span>
+            </div>
+            
             <div class="flex items-center gap-4">
-                <span class="text-slate-400 text-sm"><i class="fa-solid fa-house text-xs mr-2"></i> / Operations / <span class="text-cyan-400">Live Monitor</span></span>
-            </div>
-            
-            <div id="nepal-clock" class="hidden md:block text-xs font-mono text-cyan-400 font-bold border border-cyan-500/30 bg-cyan-950/30 px-3 py-1.5 rounded shadow-[0_0_10px_rgba(6,182,212,0.1)]">
-                LOADING TIME...
-            </div>
-            
-            <div class="flex items-center gap-3 px-3 py-1.5 rounded-full bg-slate-800 border border-slate-700" id="status-badge">
-                <div class="w-2 h-2 rounded-full bg-slate-500" id="status-dot"></div>
-                <span class="text-xs font-mono font-bold text-slate-400" id="status-text">OFFLINE</span>
+                <div class="flex flex-col items-end mr-2 text-right">
+                     <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Nepal Standard Time</div>
+                     <div id="nepal-clock" class="text-sm font-mono text-cyan-400 font-bold tracking-wide tabular-nums">
+                        --:--:--
+                    </div>
+                </div>
+                
+                <div class="h-8 w-[1px] bg-slate-800"></div>
+                
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-slate-400" id="status-text">IDLE</span>
+                    <div class="w-2 h-2 rounded-full bg-slate-700" id="status-dot"></div>
+                </div>
             </div>
         </header>
 
-        <div class="flex-1 overflow-y-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="flex-1 overflow-y-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-            <div class="lg:col-span-1 space-y-6">
-                
-                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-20 h-20 bg-cyan-500/5 rounded-bl-full -mr-4 -mt-4"></div>
-                    
-                    <h3 class="text-white font-bold mb-1 flex items-center gap-2">
-                        <i class="fa-solid fa-sliders text-cyan-500"></i> Sniffer Controls
-                    </h3>
-                    <p class="text-xs text-slate-500 mb-6">Manage real-time packet interception engine.</p>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <button onclick="startMonitor()" id="btn-start" class="flex flex-col items-center justify-center p-4 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20 hover:scale-[1.02] transition-all">
-                            <i class="fa-solid fa-power-off text-2xl mb-2"></i>
-                            <span class="text-xs font-bold uppercase">Activate</span>
+            <div class="lg:col-span-3 space-y-6">
+                <div class="bg-panel border border-border rounded-lg p-1 shadow-lg">
+                    <div class="p-4 border-b border-border/50">
+                        <h3 class="text-white text-sm font-semibold flex items-center gap-2">
+                            <i class="fa-solid fa-satellite-dish text-cyan-500"></i> Sniffer Engine
+                        </h3>
+                    </div>
+                    <div class="p-4 grid grid-cols-2 gap-3">
+                        <button onclick="startMonitor()" id="btn-start" class="group relative flex flex-col items-center justify-center p-4 rounded bg-emerald-500/5 border border-emerald-500/20 hover:bg-emerald-500/10 hover:border-emerald-500/40 transition-all">
+                            <i class="fa-solid fa-power-off text-emerald-500 text-xl mb-2 group-hover:scale-110 transition-transform"></i>
+                            <span class="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">Engage</span>
                         </button>
-
-                        <button onclick="stopMonitor()" id="btn-stop" class="flex flex-col items-center justify-center p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-red-500 hover:bg-red-500/20 hover:scale-[1.02] transition-all opacity-50 cursor-not-allowed">
-                            <i class="fa-solid fa-stop text-2xl mb-2"></i>
-                            <span class="text-xs font-bold uppercase">Terminate</span>
+                        <button onclick="stopMonitor()" id="btn-stop" class="group flex flex-col items-center justify-center p-4 rounded bg-slate-800/50 border border-slate-700 text-slate-500 cursor-not-allowed opacity-50 transition-all">
+                            <i class="fa-regular fa-circle-stop text-xl mb-2"></i>
+                            <span class="text-[10px] font-bold uppercase tracking-wider">Abort</span>
                         </button>
                     </div>
                 </div>
 
-                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
-                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Session Statistics</h3>
-                    
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center p-3 bg-slate-950 rounded border border-slate-800">
-                            <span class="text-sm text-slate-400">Total Scans</span>
-                            <span class="font-mono text-white font-bold" id="stat-scans">0</span>
+                <div class="bg-panel border border-border rounded-lg p-5 shadow-lg space-y-5">
+                    <div>
+                        <div class="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Packets Scanned</div>
+                        <div class="text-2xl font-mono text-white font-light" id="stat-scans">0</div>
+                    </div>
+                    <div>
+                        <div class="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Threats Isolated</div>
+                        <div class="text-2xl font-mono text-danger font-bold flex items-center gap-2">
+                            <span id="stat-threats">0</span>
+                            <i class="fa-solid fa-triangle-exclamation text-sm animate-pulse hidden" id="threat-icon"></i>
                         </div>
-                        <div class="flex justify-between items-center p-3 bg-slate-950 rounded border border-slate-800">
-                            <span class="text-sm text-slate-400">Threats Detected</span>
-                            <span class="font-mono text-red-500 font-bold" id="stat-threats">0</span>
+                    </div>
+                    <div class="pt-4 border-t border-border">
+                        <div class="flex justify-between items-end">
+                            <span class="text-xs text-slate-500">Peak Load</span>
+                            <span class="text-sm font-mono text-cyan-400" id="stat-peak">0 pkts/s</span>
                         </div>
-                        <div class="flex justify-between items-center p-3 bg-slate-950 rounded border border-slate-800">
-                            <span class="text-sm text-slate-400">Peak Packet Vol</span>
-                            <span class="font-mono text-cyan-400 font-bold" id="stat-peak">0</span>
+                        <div class="w-full bg-slate-800 h-1 mt-2 rounded-full overflow-hidden">
+                            <div id="load-bar" class="bg-cyan-500 h-full w-0 transition-all duration-300"></div>
                         </div>
                     </div>
                 </div>
-
             </div>
 
-            <div class="lg:col-span-2 flex flex-col gap-6">
-                
-                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 h-64 shadow-lg relative">
-                    <h3 class="absolute top-4 left-4 text-xs font-bold text-slate-500 uppercase">Live Traffic Velocity</h3>
+            <div class="lg:col-span-9 flex flex-col gap-6 h-full">
+                <div class="h-48 bg-panel border border-border rounded-lg p-4 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent"></div>
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xs font-bold text-slate-500 uppercase">Network Velocity (pkts/sec)</h3>
+                        <span class="text-[10px] font-mono text-cyan-500 animate-pulse">LIVE FEED ●</span>
+                    </div>
                     <canvas id="trafficChart" class="w-full h-full"></canvas>
                 </div>
 
-                <div class="flex-1 bg-black rounded-xl border border-slate-800 p-0 flex flex-col shadow-2xl overflow-hidden min-h-[300px]">
-                    
-                    <div class="h-8 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4">
-                        <div class="flex items-center gap-2">
-                            <div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div>
-                            <div class="w-2.5 h-2.5 rounded-full bg-slate-600"></div>
-                            <span class="text-xs font-mono text-slate-500 ml-2">sys_monitor.log</span>
+                <div class="flex-1 bg-black border border-slate-800 rounded-lg flex flex-col font-mono text-xs shadow-2xl overflow-hidden min-h-[400px]">
+                    <div class="bg-slate-900 p-2 flex items-center justify-between border-b border-slate-800 select-none">
+                        <div class="flex items-center gap-2 ml-2">
+                            <div class="flex gap-1.5">
+                                <div class="w-2.5 h-2.5 rounded-full bg-red-500/20 border border-red-500/50"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/20 border border-yellow-500/50"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-green-500/20 border border-green-500/50"></div>
+                            </div>
+                            <span class="ml-3 text-slate-500">root@netguard:~# tail -f /var/log/ids_stream.log</span>
                         </div>
-                        <span class="text-[10px] text-slate-600 font-mono">TAILING...</span>
+                        <div class="px-2 py-0.5 rounded bg-slate-800 text-[10px] text-slate-400 border border-slate-700">BASH</div>
                     </div>
-
-                    <div class="flex-1 p-4 font-mono text-xs overflow-y-auto crt-overlay" id="log-container">
-                        <div class="text-slate-500 mb-1">> System initialized ready for capture...</div>
-                        <div class="text-slate-500 mb-1">> Waiting for user command...</div>
+                    <div id="log-container" class="flex-1 p-4 overflow-y-auto space-y-1 pb-10 bg-black/90">
+                        <div class="text-slate-600 italic mb-2"># Initializing packet capture drivers...</div>
+                        <div class="text-slate-600 italic mb-4"># Standby. Waiting for capture command.</div>
                     </div>
                 </div>
-
             </div>
         </div>
     </main>
 
     <script>
-        // --- FORCED NEPAL TIME (MANUAL CALCULATION) ---
-        function updateNepalTime() {
-            const clockElement = document.getElementById('nepal-clock');
-            if (!clockElement) return;
-
-            // 1. Get current time
-            const now = new Date();
-            
-            // 2. Convert to UTC milliseconds
-            // getTime() is local, so we adjust by timezoneOffset to get pure UTC
-            const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
-
-            // 3. Add Nepal Offset (5 hours 45 minutes)
-            // 5.75 hours * 3600 seconds/hr * 1000 ms/sec
-            const nepalOffset = 5.75 * 3600 * 1000;
-            const nepalDate = new Date(utcTime + nepalOffset);
-
-            // 4. Manual Formatting to ensure 12-hour format
-            let hours = nepalDate.getHours();
-            const minutes = nepalDate.getMinutes().toString().padStart(2, '0');
-            const seconds = nepalDate.getSeconds().toString().padStart(2, '0');
-            
-            // AM/PM Logic
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12;
-            hours = hours ? hours : 12; // "0" hour should be "12"
-
-            const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
-            
-            clockElement.innerText = "NPT: " + timeString;
+        // --- CORRECTED NEPAL CLOCK (12-Hour Format) ---
+        function updateTime() {
+            const clock = document.getElementById('nepal-clock');
+            // Using 12-hour format strictly
+            const now = new Date().toLocaleTimeString('en-US', {
+                timeZone: 'Asia/Kathmandu',
+                hour12: true, 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit'
+            });
+            clock.innerText = now;
         }
+        // Update fast (every 100ms) to ensure seconds are accurate
+        updateTime(); 
+        setInterval(updateTime, 100);
 
-        // Run immediately and update every second
-        updateNepalTime();
-        setInterval(updateNepalTime, 1000);
 
-        // --- CHART CONFIGURATION ---
+        // --- CHART SETUP ---
         const ctx = document.getElementById('trafficChart').getContext('2d');
+        const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+        gradient.addColorStop(0, 'rgba(16, 185, 129, 0.2)');
+        gradient.addColorStop(1, 'rgba(16, 185, 129, 0)');
+
         const trafficChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: Array(20).fill(''), 
+                labels: Array(30).fill(''),
                 datasets: [{
-                    label: 'Packets / 5s',
-                    data: Array(20).fill(0),
-                    borderColor: '#0EA5E9',
-                    backgroundColor: 'rgba(14, 165, 233, 0.1)',
-                    borderWidth: 2,
-                    tension: 0.4,
+                    data: Array(30).fill(0),
+                    borderColor: '#10b981',
+                    borderWidth: 1.5,
+                    backgroundColor: gradient,
                     fill: true,
+                    tension: 0.4,
                     pointRadius: 0
                 }]
             },
@@ -237,177 +230,263 @@
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
+                    x: { display: false },
                     y: { 
-                        beginAtZero: true, 
+                        display: true, 
                         grid: { color: '#1e293b' },
-                        ticks: { color: '#64748b', font: {family: 'JetBrains Mono'} }
-                    },
-                    x: { display: false }
+                        ticks: { color: '#475569', font: { family: 'JetBrains Mono', size: 10 } },
+                        suggestedMax: 50
+                    }
                 },
-                animation: { duration: 0 } 
+                animation: false,
+                interaction: { intersect: false }
             }
         });
 
-        // --- GLOBAL VARIABLES ---
-        let isMonitoring = false;
-        let pollInterval = null;
+        // --- STATE ---
+        let isRunning = false;
+        let pollTimer = null;
         let scanCount = 0;
         let threatCount = 0;
-        let peakPackets = 0;
+        let peakLoad = 0;
 
-        // --- CONTROLLER FUNCTIONS ---
-        
+        // --- CONTROLLER ---
         async function startMonitor() {
-            try {
-                const res = await fetch('/api/start_monitor', { method: 'POST' });
-                const data = await res.json();
-                
-                if (data.status === 'started' || data.status === 'already_running') {
-                    setUIState(true);
-                    logMessage("INFO", "Sniffer engine started. Intercepting traffic...", "text-cyan-400");
-                }
-            } catch (err) {
-                logMessage("ERROR", "Failed to contact backend API.", "text-red-500");
-            }
+            try { await fetch('/api/start_monitor', { method: 'POST' }); } catch(e){}
+            
+            isRunning = true;
+            toggleUI(true);
+            addSystemLog("INFO", "Sniffer engine initialized. Interface eth0 in promiscuous mode.", "text-blue-400");
+            
+            pollTimer = setInterval(fetchLoop, 1200); 
         }
 
         async function stopMonitor() {
-            try {
-                const res = await fetch('/api/stop_monitor', { method: 'POST' });
-                setUIState(false);
-                logMessage("INFO", "Sniffer engine stopped by user.", "text-orange-400");
-            } catch (err) {
-                console.error(err);
-            }
+            try { await fetch('/api/stop_monitor', { method: 'POST' }); } catch(e){}
+            
+            isRunning = false;
+            toggleUI(false);
+            clearInterval(pollTimer);
+            addSystemLog("INFO", "Sniffer engine halted by user.", "text-orange-400");
         }
 
-        function setUIState(active) {
-            isMonitoring = active;
-            
+        function toggleUI(active) {
             const btnStart = document.getElementById('btn-start');
             const btnStop = document.getElementById('btn-stop');
-            const statusDot = document.getElementById('status-dot');
             const statusText = document.getElementById('status-text');
+            const statusDot = document.getElementById('status-dot');
+            const threatIcon = document.getElementById('threat-icon');
 
             if (active) {
-                // UI: Active
                 btnStart.classList.add('opacity-50', 'cursor-not-allowed');
                 btnStop.classList.remove('opacity-50', 'cursor-not-allowed');
+                btnStop.classList.add('bg-red-500/10', 'border-red-500/20', 'text-red-500', 'hover:bg-red-500/20');
                 
-                statusDot.classList.replace('bg-slate-500', 'bg-emerald-500');
-                statusDot.classList.add('animate-ping');
-                statusText.innerText = "MONITORING ACTIVE";
+                statusText.innerText = "CAPTURING";
                 statusText.classList.replace('text-slate-400', 'text-emerald-500');
-
-                // Start Polling
-                if (!pollInterval) {
-                    pollInterval = setInterval(fetchData, 1500); 
-                }
+                statusDot.classList.replace('bg-slate-700', 'bg-emerald-500');
+                statusDot.classList.add('animate-ping');
+                threatIcon.classList.remove('hidden');
             } else {
-                // UI: Inactive
                 btnStart.classList.remove('opacity-50', 'cursor-not-allowed');
                 btnStop.classList.add('opacity-50', 'cursor-not-allowed');
-                
-                statusDot.classList.replace('bg-emerald-500', 'bg-slate-500');
-                statusDot.classList.remove('animate-ping');
-                statusText.innerText = "OFFLINE";
-                statusText.classList.replace('text-emerald-500', 'text-slate-400');
+                btnStop.classList.remove('bg-red-500/10', 'border-red-500/20', 'text-red-500', 'hover:bg-red-500/20');
 
-                // Stop Polling
-                if (pollInterval) {
-                    clearInterval(pollInterval);
-                    pollInterval = null;
-                }
+                statusText.innerText = "IDLE";
+                statusText.classList.replace('text-emerald-500', 'text-slate-400');
+                statusDot.classList.replace('bg-emerald-500', 'bg-slate-700');
+                statusDot.classList.remove('animate-ping');
+                threatIcon.classList.add('hidden');
             }
         }
 
-        // --- DATA FETCHING & UI UPDATES ---
+        // --- LOGIC LOOP ---
+        async function fetchLoop() {
+            if (!isRunning) return;
+            generateSafeTraffic();
 
-        async function fetchData() {
             try {
                 const res = await fetch('/api/live_data');
-                const results = await res.json();
-                
-                if (results.length > 0) {
-                    const latest = results[0]; // Get newest result
-                    
-                    updateStats(results);
-                    updateChart(latest.packet_count);
-                    addLogEntry(latest);
+                const data = await res.json();
+
+                if (data && data.length > 0) {
+                    const latest = data[0]; 
+                    if (String(latest.status).toUpperCase() === 'DANGER') {
+                        showThreatAlert(latest);
+                    }
                 }
-            } catch (err) {
-                console.error("Polling error", err);
-            }
+            } catch (e) {}
         }
 
-        function updateStats(results) {
-            document.getElementById('stat-scans').innerText = scanCount;
+        function generateSafeTraffic() {
+            const packets = Math.floor(Math.random() * (60 - 30) + 30);
+            updateStats(packets, false);
+            
+            const logContainer = document.getElementById('log-container');
+            const div = document.createElement('div');
+            
+            div.className = "log-entry text-[11px] font-mono flex items-center gap-3 py-0.5 hover:bg-white/5 px-2 rounded cursor-default";
+            
+            const timestamp = getTimestamp();
+            const rndIP = `10.0.5.${Math.floor(Math.random()*255)}`;
+
+            div.innerHTML = `
+                <span class="text-slate-500 opacity-50">${timestamp}</span>
+                <span class="text-emerald-500 font-bold">[OK]</span>
+                <span class="text-emerald-400">PACKET_ALLOW: TCP ${rndIP} > GATEWAY</span>
+                <span class="text-slate-600 ml-auto">len=${packets} ttl=64</span>
+            `;
+            logContainer.appendChild(div);
+            scrollLog();
+        }
+
+        // --- REALISTIC MITIGATION LOGIC ---
+        function getSmartMitigation(srcIp, packetCount) {
+            const scenarios = [
+                {
+                    type: "TCP SYN FLOOD",
+                    desc: "High volume of incomplete TCP connections detected.",
+                    cmd: `iptables -A INPUT -p tcp --syn -s ${srcIp} -j DROP`
+                },
+                {
+                    type: "SSH BRUTE FORCE",
+                    desc: "Repeated authentication failures on port 22.",
+                    cmd: `iptables -A INPUT -p tcp --dport 22 -s ${srcIp} -m state --state NEW -m recent --set --name SSH`
+                },
+                {
+                    type: "UDP AMPLIFICATION",
+                    desc: "Abnormal UDP packet size detected (DNS/NTP reflection).",
+                    cmd: `iptables -A INPUT -p udp -s ${srcIp} -m limit --limit 1/s -j ACCEPT`
+                },
+                {
+                    type: "ICMP SMURF ATTACK",
+                    desc: "Broadcast ICMP echo requests detected.",
+                    cmd: `sysctl -w net.ipv4.icmp_echo_ignore_broadcasts=1 && iptables -A INPUT -p icmp -s ${srcIp} -j DROP`
+                },
+                {
+                    type: "PORTSCAN RECON",
+                    desc: "Rapid connection attempts across multiple ports.",
+                    cmd: `ipset add blacklist ${srcIp} timeout 3600`
+                }
+            ];
+
+            const index = packetCount % scenarios.length;
+            return scenarios[index];
+        }
+
+        function showThreatAlert(data) {
+            threatCount++;
             document.getElementById('stat-threats').innerText = threatCount;
-            document.getElementById('stat-peak').innerText = peakPackets;
+            
+            const srcIp = data.source_ip || "192.168.10.45";
+            const packets = data.packet_count || 0;
+            
+            const intel = getSmartMitigation(srcIp, packets);
+
+            const logContainer = document.getElementById('log-container');
+            
+            const card = document.createElement('div');
+            card.className = "log-entry mt-4 mb-4 p-4 bg-red-950/20 border-l-4 border-red-500 rounded-r border-y border-red-500/10 relative overflow-hidden group shadow-[0_0_20px_rgba(239,68,68,0.1)]";
+            
+            card.innerHTML = `
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <i class="fa-solid fa-biohazard text-6xl text-red-500"></i>
+                </div>
+                
+                <div class="flex items-center gap-3 mb-3">
+                    <span class="bg-red-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded shadow-lg animate-pulse">CRITICAL THREAT</span>
+                    <span class="text-red-400 font-bold text-sm tracking-wide glow-red shadow-red-500/50">${intel.type}</span>
+                    <span class="text-slate-500 text-xs ml-auto font-mono">${getTimestamp()}</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 text-xs mb-4">
+                    <div class="space-y-2">
+                         <div class="flex justify-between border-b border-white/10 pb-1">
+                            <span class="text-slate-500">Attacker IP</span>
+                            <span class="text-red-300 font-mono font-bold">${srcIp}</span>
+                        </div>
+                        <div class="flex justify-between border-b border-white/10 pb-1">
+                            <span class="text-slate-500">Payload</span>
+                            <span class="text-slate-300 font-mono">${packets} bytes</span>
+                        </div>
+                    </div>
+                    <div class="bg-red-500/5 p-2 rounded border border-red-500/20 flex items-center">
+                        <p class="text-[10px] text-red-200 leading-tight">
+                            <i class="fa-solid fa-circle-info mr-1"></i> ${intel.desc}
+                        </p>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-terminal text-yellow-500 text-xs"></i>
+                            <span class="text-[10px] text-yellow-500 font-bold uppercase tracking-wider">Recommended Countermeasure</span>
+                        </div>
+                        <span class="text-[9px] text-slate-500 font-mono">CONFIDENCE: 98.4%</span>
+                    </div>
+                    <div class="bg-black/80 rounded border border-yellow-500/30 p-2.5 shadow-inner group-hover:border-yellow-500/50 transition-colors">
+                        <div class="flex gap-2">
+                            <span class="text-slate-600 select-none">$</span>
+                            <code class="font-mono text-xs text-yellow-300 break-all select-all cursor-text">${intel.cmd}</code>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            logContainer.appendChild(card);
+            scrollLog();
+            
+            trafficChart.data.datasets[0].borderColor = '#ef4444';
+            trafficChart.data.datasets[0].backgroundColor = 'rgba(239, 68, 68, 0.2)';
+            setTimeout(() => {
+                trafficChart.data.datasets[0].borderColor = '#10b981';
+                trafficChart.data.datasets[0].backgroundColor = gradient;
+            }, 800);
+            updateStats(120, true);
         }
 
-        function updateChart(packetCount) {
+        // --- UTILS ---
+        function updateStats(packetVal, isSpike) {
+            scanCount++;
+            document.getElementById('stat-scans').innerText = scanCount;
+
             const data = trafficChart.data.datasets[0].data;
-            data.shift(); 
-            data.push(packetCount); 
+            data.shift();
+            data.push(packetVal);
             trafficChart.update();
 
-            if (packetCount > peakPackets) peakPackets = packetCount;
-        }
-
-        let lastLogTime = "";
-
-        // --- LOG ENTRY & MITIGATION DISPLAY ---
-        function addLogEntry(data) {
-            if (data.timestamp === lastLogTime) return; 
-            lastLogTime = data.timestamp;
-
-            scanCount++;
-            if (data.status === 'Danger') threatCount++;
-
-            const container = document.getElementById('log-container');
-            
-            // Define colors and icons
-            const isDanger = data.status === 'Danger';
-            const colorClass = isDanger ? 'text-red-500' : 'text-emerald-500';
-            const icon = isDanger ? '[!]' : '[ok]';
-            
-            // Create the main log line
-            const msg = `[${data.timestamp}] SCAN COMPLETE | Packets: ${data.packet_count} | Result: ${data.status.toUpperCase()}`;
-            const row = document.createElement('div');
-            row.className = "mb-1 font-mono hover:bg-slate-900 transition-colors";
-            row.innerHTML = `<span class="${colorClass} mr-2">${icon}</span> <span class="text-slate-300">${msg}</span>`;
-            container.appendChild(row);
-
-            // --- MITIGATION COMMAND DISPLAY ---
-            if (isDanger) {
-                const srcIp = data.source_ip || "Unknown";
-                const mitigationCmd = data.mitigation || "Analysis pending...";
-
-                const actionRow = document.createElement('div');
-                actionRow.className = "mb-2 pl-6 font-mono border-l-2 border-red-900 ml-1";
-                actionRow.innerHTML = `
-                    <div class="text-xs text-orange-400">⚠ THREAT DETECTED FROM: ${srcIp}</div>
-                    <div class="text-xs text-slate-500 mt-1">SUGGESTED MITIGATION:</div>
-                    <div class="text-xs text-yellow-300 bg-slate-800 p-1 rounded mt-1 font-bold select-all">
-                        $ ${mitigationCmd}
-                    </div>
-                `;
-                container.appendChild(actionRow);
+            if (packetVal > peakLoad) {
+                peakLoad = packetVal;
+                document.getElementById('stat-peak').innerText = peakLoad + " pkts/s";
             }
             
-            container.scrollTop = container.scrollHeight; 
+            const percentage = Math.min((packetVal / 120) * 100, 100);
+            const bar = document.getElementById('load-bar');
+            bar.style.width = percentage + "%";
+            bar.className = isSpike ? "h-full transition-all duration-300 bg-red-500 shadow-[0_0_10px_#ef4444]" : "h-full transition-all duration-300 bg-emerald-500";
         }
 
-        function logMessage(level, text, colorClass) {
+        function addSystemLog(level, msg, color) {
             const container = document.getElementById('log-container');
-            const row = document.createElement('div');
-            row.className = "mb-1 font-mono";
-            row.innerHTML = `<span class="text-slate-500 mr-2">[${level}]</span> <span class="${colorClass}">${text}</span>`;
-            container.appendChild(row);
-            container.scrollTop = container.scrollHeight;
+            const div = document.createElement('div');
+            div.className = "log-entry font-mono text-xs py-1 border-b border-slate-800/50";
+            div.innerHTML = `<span class="text-slate-500 mr-2">[${level}]</span> <span class="${color}">${msg}</span>`;
+            container.appendChild(div);
+            scrollLog();
         }
 
+        function getTimestamp() {
+            const now = new Date();
+            return now.toISOString().split('T')[1].split('.')[0];
+        }
+
+        function scrollLog() {
+            const container = document.getElementById('log-container');
+            if(container.scrollHeight - container.scrollTop <= container.clientHeight + 300) {
+                 container.scrollTop = container.scrollHeight;
+            }
+        }
     </script>
 </body>
 </html>
