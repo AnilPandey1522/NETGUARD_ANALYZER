@@ -29,7 +29,7 @@ monitoring_thread = None
 
 # --- CONFIGURATION ---
 # UPDATED KEY FROM YOUR SCREENSHOT
-VIRUSTOTAL_API_KEY = 'e23493a51e6a5524a343765c3d0bb5b298e2ae5361c8c1f79bd936db679b8938' 
+VIRUSTOTAL_API_KEY = '' 
 
 # Load the model once at startup
 model_path = os.path.join('model', 'rf_model.pkl')
